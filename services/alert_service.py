@@ -96,16 +96,17 @@ model = genai.GenerativeModel("gemini-2.0-flash")
 async def fetch_alert_details_from_gemini(location: str = "global") -> Optional[List[dict]]:
     # last 30 days month
     previous_month = (datetime.utcnow() - timedelta(days=30)).strftime("%Y-%m")
+    today = datetime.utcnow().strftime("%Y-%m-%d")
     prompt = f"""
     You are AidAgent, an AI system responsible for gathering and organizing crisis-related information.
 
     Task:
-    Fetch the latest data of after {previous_month}, related to disasters in "{location}" (e.g., floods, earthquakes, wildfires, conflicts, pandemics, disaster, crashes) from reliable public sources such as:
+    Fetch the latest data of after {previous_month} and before {today}, related to disasters in "{location}" (e.g., floods, earthquakes, wildfires, conflicts, pandemics, disaster, crashes) from reliable public sources such as:
     - Government alerts
     - International relief organizations (e.g., UN, Red Cross, WHO)
     - Updates from social medias (e.g., Twitter, public APIs, RSS feeds) (Day one old data is fine.)
     {
-      "Include only 3-4 events." if location!="global" else "Include only atleast 7-8 events."
+      "Include only 7-8 events." if location!="global" else "Include only atleast 7-8 events."
     }
     For each crisis event, extract the following:
     - title: Short, descriptive title of the event
