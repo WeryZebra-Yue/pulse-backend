@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.responses import HTMLResponse
 
 from auth.jwt_bearer import JWTBearer
 from config.config import initiate_database
@@ -17,9 +18,19 @@ async def start_database():
     await initiate_database()
 
 
-@app.get("/", tags=["Root"])
+@app.get("/", tags=["Root"], response_class=HTMLResponse)
 async def read_root():
-    return {"message": "Welcome to this fantastic app."}
+    return HTMLResponse(content="""
+    <html>
+        <head>
+            <title>Welcome to AidAgent API</title>
+        </head>
+        <body>
+            <h1>Welcome to AidAgent API</h1>
+            <p>Visit our <a href="/docs">API documentation</a> to explore the available endpoints.</p>
+        </body>
+    </html>
+    """)
 
 
 from fastapi import FastAPI
