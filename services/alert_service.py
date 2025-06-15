@@ -5,7 +5,7 @@ from typing import List, Union, Optional
 from datetime import datetime, timedelta
 from beanie import PydanticObjectId
 from models.alert import Alert, MetaInfo
-
+from config.config import Settings
 async def add_alert(new_alert: Alert) -> Alert:
     alert = await new_alert.create()
     return alert
@@ -83,7 +83,7 @@ async def delete_alert(alert_id: str) -> bool:
 
 
 # Initialize Gemini
-genai.configure(api_key=os.getenv("GENAI_API_KEY"))
+genai.configure(api_key=Settings().genai_api_key)
 
 # Create a generative model
 model = genai.GenerativeModel("gemini-2.5-flash")

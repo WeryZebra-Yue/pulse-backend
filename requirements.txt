@@ -34,3 +34,4 @@ tomli==2.0.1
 typing_extensions==4.11.0
 uvicorn==0.29.0
 google-generativeai
+pydantic_settings

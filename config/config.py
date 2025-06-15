@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     # JWT
     secret_key: str = "secret"
     algorithm: str = "HS256"
+    genai_api_key: Optional[str] = None
 
     class Config:
         env_file = ".env.dev"
