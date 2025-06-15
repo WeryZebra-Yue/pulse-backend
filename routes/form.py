@@ -7,7 +7,11 @@ from services.form_service import get_form_by_alert, add_message_to_form
 router = APIRouter()
 
 
-@router.get("/alert/{alert_id}", response_model=Response)
+@router.get(
+    "/alert/{alert_id}", 
+    response_model=Response,
+    description="Retrieve the communication form associated with a specific emergency alert by alert_id. Returns the complete form structure including all message threads, user communications, timestamps, and form metadata. Each form contains an array of messages with user_id (wallet address or user identifier), message content, and UTC timestamps. Essential for emergency communication coordination, stakeholder updates, and maintaining communication audit trails during crisis response. Returns 404 if no form exists for the specified alert."
+)
 async def get_form(alert_id: str):
     form = await get_form_by_alert(alert_id)
     if not form:
@@ -20,7 +24,11 @@ async def get_form(alert_id: str):
     }
 
 
-@router.post("/alert/{alert_id}/message", response_model=Response)
+@router.post(
+    "/alert/{alert_id}/message", 
+    response_model=Response,
+    description="Add a new message to the communication form associated with a specific emergency alert. Requires user_id (wallet address or user identifier) and message content through NewMessageModel schema. Automatically timestamps the message with UTC datetime and appends it to the existing message thread. Updates the form's last modified timestamp for tracking communication activity. Critical for real-time emergency communication, stakeholder coordination, status updates, and maintaining chronological communication records during crisis response efforts."
+)
 async def post_message(alert_id: str, message: NewMessageModel = Body(...)):
     form = await add_message_to_form(alert_id, message.dict())
     return {
