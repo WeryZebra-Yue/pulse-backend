@@ -13,7 +13,7 @@ async def add_alert(new_alert: Alert) -> Alert:
 async def retrieve_alerts(
         location: Optional[str] = None,
         refresh: bool = False
-) -> List[Alert]:
+) -> List[Alert]:   
     # sort and filter alerts based on location and refresh flag
     # alerts = await Alert.
 
@@ -30,7 +30,7 @@ async def retrieve_alerts(
         meta_info = await MetaInfo.find_one()  # Adjust based on your DB design
         if not meta_info or not meta_info.last_loaded or meta_info.last_loaded < datetime.utcnow() - timedelta(days=1):
             should_reload = True
-    if location !="global" or refresh:
+    if refresh:
         should_reload = True  # Force reload if location is specified
     if should_reload:
         new_data = await fetch_alert_details_from_gemini(location or "global")
@@ -99,7 +99,7 @@ async def fetch_alert_details_from_gemini(location: str = "global") -> Optional[
     You are AidAgent, an AI system responsible for gathering and organizing crisis-related information.
 
     Task:
-    Fetch the latest data of after {previous_month} and before {today}, related to disasters in "{location}" (e.g., floods, earthquakes, wildfires, conflicts, pandemics, disaster, crashes) from reliable public sources such as:
+    Fetch the latest data of after {previous_month} and before {today}, related to disasters only and only of "{location}" (e.g., floods, earthquakes, wildfires, conflicts, pandemics, disaster, crashes) from reliable public sources such as:
     - Government alerts
     - International relief organizations (e.g., UN, Red Cross, WHO)
     - Updates from social medias (e.g., Twitter, public APIs, RSS feeds) (Day one old data is fine.)
