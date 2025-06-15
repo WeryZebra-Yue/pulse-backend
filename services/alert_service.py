@@ -16,6 +16,8 @@ async def retrieve_alerts(
 ) -> List[Alert]:
     # sort and filter alerts based on location and refresh flag
     # alerts = await Alert.
+    new_data = await fetch_alert_details_from_gemini(location or "global")
+
     if location is None:
         location = "global"
     alerts = await Alert.find(Alert.location == location).sort(Alert.timestamp.desc).to_list()
@@ -93,11 +95,13 @@ genai.configure(api_key=Settings().genai_api_key)
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 async def fetch_alert_details_from_gemini(location: str = "global") -> Optional[List[dict]]:
+    # last 30 days month
+    previous_month = (datetime.utcnow() - timedelta(days=30)).strftime("%Y-%m")
     prompt = f"""
     You are AidAgent, an AI system responsible for gathering and organizing crisis-related information.
 
     Task:
-    Fetch the latest data related to disasters in "{location}" (e.g., floods, earthquakes, wildfires, conflicts, pandemics, disaster, crashes) from reliable public sources such as:
+    Fetch the latest data of after {previous_month}, related to disasters in "{location}" (e.g., floods, earthquakes, wildfires, conflicts, pandemics, disaster, crashes) from reliable public sources such as:
     - Government alerts
     - International relief organizations (e.g., UN, Red Cross, WHO)
     - Updates from social medias (e.g., Twitter, public APIs, RSS feeds) (Day one old data is fine.)
@@ -179,3 +183,6 @@ async def update_alert_if_stale(alert_id: str) -> Optional[Alert]:
             alert.meta.last_loaded = now
             await alert.save()
     return alert
+
+# ask AI about the alert
+
