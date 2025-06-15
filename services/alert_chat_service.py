@@ -50,7 +50,9 @@ async def chat_about_alert(alert_id: str, user_message: str, user_id: str) -> st
             "parts": [
                 f"You are a helpful assistant that provides information about alerts. You will answer questions based on the alert details provided. Nothing else. | Context: {alert_context}. You are a helpful assistant that provides information about alerts. You will answer questions based on the alert details provided. Nothing else."
             ]
-        },
+        }
+    ]
+    prompt.extend([
         {
             "role": "model" if msg["role"] == "ai" else msg["role"],
             "parts": [
@@ -58,7 +60,7 @@ async def chat_about_alert(alert_id: str, user_message: str, user_id: str) -> st
             ]
         }
         for msg in recent_messages
-    ]
+    ])
 
     # Get Gemini response
     try:
