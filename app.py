@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-
 from auth.jwt_bearer import JWTBearer
 from config.config import initiate_database
 from routes.home import router as home_router
@@ -85,6 +84,14 @@ app = FastAPI(
             "description": "Emergency communication systems with real-time messaging and audit trails"
         }
     ]
+)
+app.add_middleware(
+    # CORS middleware to allow cross-origin requests
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins for development; restrict in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Add CORS middleware
