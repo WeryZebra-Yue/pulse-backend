@@ -47,7 +47,7 @@ async def get_donation(id: PydanticObjectId):
 
 
 @router.post(
-    "/", 
+    "/transaction", 
     response_model=Response,
     description="Record a new cryptocurrency donation transaction in the AidAgent platform. Requires donor_wallet (blockchain address), amount (numeric value), currency (ETH, BTC, USDC, etc.), and charity_id as mandatory fields. Automatically timestamps the donation with UTC datetime for accurate record-keeping. Essential for tracking blockchain-based charitable contributions, maintaining donation transparency, and linking contributions to specific charitable organizations. Returns 201 status with created donation record."
 )

@@ -1,10 +1,9 @@
 from typing import Optional, List
 from datetime import datetime
 from beanie import Document
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import Dict
-# from solana.publickey import PublicKey
-
+from solana.rpc.api import Pubkey
 
 class User(Document):
     fullname: str
@@ -15,12 +14,12 @@ class User(Document):
     class Settings:
         name = "users"
 
-    # @validator("solana_wallet")
-    # def validate_solana_address(cls, v):
-    #     if v is None:
-    #         return v
-    #     try:
-    #         PublicKey(v)
-    #     except Exception:
-    #         raise ValueError("Invalid Solana wallet address")
-    #     return v
+    @field_validator("wallet_address")
+    def validate_solana_address(cls, v):
+        if v is None:
+            return v
+        try:
+            Pubkey(v)
+        except Exception:
+            raise ValueError("Invalid Solana wallet address")
+        return v
