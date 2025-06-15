@@ -36,7 +36,7 @@ async def chat_about_alert(alert_id: str, user_message: str, user_id: str) -> st
     # Add user message to conversation history
     alert_chat.messages.append({
         "role": "user",
-        "content": user_message + "You are a helpful assistant that provides information about alerts. You will answer questions based on the alert details provided. Nothing else.",
+        "content": user_message ,
         "timestamp": datetime.utcnow(),
     })
 
@@ -47,7 +47,9 @@ async def chat_about_alert(alert_id: str, user_message: str, user_id: str) -> st
     prompt = [
         {
             "role": "model" if msg["role"] == "ai" else msg["role"],
-            "parts": [f'{msg["content"]} | Context: {alert_context}']
+            "parts": [
+                f'{msg["content"]} | Context: {alert_context}. You are a helpful assistant that provides information about alerts. You will answer questions based on the alert details provided. Nothing else.'
+            ]
         }
         for msg in recent_messages
     ]
