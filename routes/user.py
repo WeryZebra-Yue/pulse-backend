@@ -17,18 +17,17 @@ router = APIRouter()
 
 @router.get(
     "/", 
-    response_model=UserResponse,
-    description="Retrieve a comprehensive list of all registered users in the AidAgent platform. This endpoint returns user profiles including wallet addresses, registration timestamps, location data, and contact information. Useful for administrative purposes, user management, and platform analytics. Returns standardized UserResponse format with status codes and metadata."
+    
+    description="Retrieve a count of all active users registered on the AidAgent platform. Returns the total number of unique user accounts created, which is essential for platform analytics, user engagement metrics, and monitoring community growth. Useful for administrative dashboards, user base statistics, and evaluating platform reach. Does not return individual user data for privacy reasons."
 )
 async def get_users():
-    users = await retrieve_users()
+    active_users = await User.find().count()
     return {
         "status_code": 200,
         "response_type": "success",
-        "description": "Users retrieved successfully",
-        "data": users,
+        "description": "Active users retrieved successfully",
+        "active_users": active_users,
     }
-
 
 @router.get(
     "/{id}", 
@@ -110,17 +109,3 @@ async def delete_user_route(id: PydanticObjectId):
         "data": False,
     }
 from datetime import datetime, timedelta
-# get active users
-@router.get(
-    "/active", 
-    response_model=List[UserResponse],
-    description="Retrieve a list of active users who have registered within the last 30 days. Useful for identifying recent platform engagement and user activity trends. Returns standardized UserResponse format with status codes and metadata."
-)
-async def get_active_users():
-    active_users = await User.find(User.created_at >= (datetime.utcnow() - timedelta(days=30))).to_list()
-    return {
-        "status_code": 200,
-        "response_type": "success",
-        "description": "Active users retrieved successfully",
-        "data": active_users,
-    }
