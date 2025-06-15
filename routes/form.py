@@ -3,6 +3,7 @@ from typing import Optional
 from models.form import Form
 from schemas.form import FormModel, NewMessageModel, Response
 from services.form_service import get_form_by_alert, add_message_to_form
+from services.form_service import get_active_form_by_user
 
 router = APIRouter()
 
@@ -36,4 +37,23 @@ async def post_message(alert_id: str, message: NewMessageModel = Body(...)):
         "response_type": "success",
         "description": "Message added to form",
         "data": form,
+    }
+
+
+@router.post(
+    "/user/{user_id}/active_alerts_forum",
+    response_model=Response,
+    description="Retrieve a list of active communities for a specific user based on their user_id. Returns an array of community identifiers where the user is actively participating. Useful for personalized user experiences, community engagement tracking, and facilitating targeted communications within active community groups."
+)
+async def get_active_alerts_by_user(user_id: str):
+    """
+    This endpoint retrieves the active communities for a user based on their user_id.
+    It returns a list of community identifiers where the user is actively participating.
+    """
+    forums = await get_active_form_by_user(user_id)
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Active communities retrieved successfully",
+        "data": forums,
     }
