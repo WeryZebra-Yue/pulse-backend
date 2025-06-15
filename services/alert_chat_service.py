@@ -46,7 +46,7 @@ async def chat_about_alert(alert_id: str, user_message: str, user_id: str) -> st
     # Convert to Gemini-compatible format
     prompt = [
         {
-            "role": "system",
+            "role": "assistant",
             "parts": [
                 f"You are a helpful assistant that provides information about alerts. You will answer questions based on the alert details provided. Nothing else. | Context: {alert_context}. You are a helpful assistant that provides information about alerts. You will answer questions based on the alert details provided. Nothing else."
             ]
