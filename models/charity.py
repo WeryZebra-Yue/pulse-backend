@@ -4,7 +4,6 @@ from typing import Optional
 
 
 class Charity(Document):
-    charity_id: str
     name: str
     description: Optional[str]
     location: Optional[str]
