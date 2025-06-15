@@ -16,7 +16,6 @@ async def retrieve_alerts(
 ) -> List[Alert]:
     # sort and filter alerts based on location and refresh flag
     # alerts = await Alert.
-    new_data = await fetch_alert_details_from_gemini(location or "global")
 
     if location is None:
         location = "global"
@@ -185,4 +184,3 @@ async def update_alert_if_stale(alert_id: str) -> Optional[Alert]:
     return alert
 
 # ask AI about the alert
-
