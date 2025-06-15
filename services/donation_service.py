@@ -15,14 +15,14 @@ async def verify_transaction(tx_signature: str) -> bool:
 async def add_donation(new_donation: Donation) -> Donation:
     # donation = await new_donation.create()
     tx_signature = new_donation.tx_signature
-    is_verified = await verify_transaction(tx_signature)
-    if not is_verified:
-        raise ValueError("Transaction verification failed. Please check the transaction signature.")
+    # is_verified = await verify_transaction(tx_signature)
+    # if not is_verified:
+    #     raise ValueError("Transaction verification failed. Please check the transaction signature.")
     donation = await new_donation.create()
     if not donation:
         raise ValueError("Failed to create donation record.")
     # Optionally, you can update the status of the donation based on verification
-    donation.status = "confirmed" if is_verified else "failed"
+    donation.status = "confirmed"
     await donation.save()
     # Return the created donation object
     return donation
