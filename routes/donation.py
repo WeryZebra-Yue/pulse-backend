@@ -9,6 +9,7 @@ from services.donation_service import (
     retrieve_donation,
     update_donation,
     delete_donation,
+    retrieve_donations_history,
     retrieve_donations_done_by_user
 )
 
@@ -122,7 +123,7 @@ async def get_total_donations_amount_by_user(user_id: PydanticObjectId):
     description="Retrieve the complete history of cryptocurrency donations made by a specific user identified by their wallet address. Returns all donation records associated with the provided user_id, including amounts, currencies, timestamps, and linked charities. Essential for donor transparency, financial tracking, and generating personalized donor reports. Returns 404 if no donation history found for the user."
 )
 async def retrieve_donations_history_by_user(user_id: PydanticObjectId):
-    donations = await retrieve_donations_done_by_user(user_id)
+    donations = await retrieve_donations_history(user_id)
     if donations:
         return {
             "status_code": 200,

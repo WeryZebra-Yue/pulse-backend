@@ -65,7 +65,7 @@ async def retrieve_donations_done_by_user(user_id: PydanticObjectId) -> List[Don
     donation_amount = sum(donation.amount for donation in donations)
     return donations, donation_amount
 
-async def retrieve_donations_history_by_user(user_id: PydanticObjectId) -> List[Donation]:
+async def retrieve_donations_history(user_id: PydanticObjectId) -> List[Donation]:
     """
     Retrieve the donation history of a specific user.
     """
