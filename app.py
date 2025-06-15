@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 
 from auth.jwt_bearer import JWTBearer
 from config.config import initiate_database
@@ -83,6 +84,20 @@ app = FastAPI(
             "description": "Emergency communication systems with real-time messaging and audit trails"
         }
     ]
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://localhost:5173",
+        "https://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 token_listener = JWTBearer()
