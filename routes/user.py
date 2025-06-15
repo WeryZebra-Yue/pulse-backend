@@ -109,3 +109,18 @@ async def delete_user_route(id: PydanticObjectId):
         "description": "User not found",
         "data": False,
     }
+from datetime import datetime, timedelta
+# get active users
+@router.get(
+    "/active", 
+    response_model=List[UserResponse],
+    description="Retrieve a list of active users who have registered within the last 30 days. Useful for identifying recent platform engagement and user activity trends. Returns standardized UserResponse format with status codes and metadata."
+)
+async def get_active_users():
+    active_users = await User.find(User.created_at >= (datetime.utcnow() - timedelta(days=30))).to_list()
+    return {
+        "status_code": 200,
+        "response_type": "success",
+        "description": "Active users retrieved successfully",
+        "data": active_users,
+    }

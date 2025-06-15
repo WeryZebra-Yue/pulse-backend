@@ -11,6 +11,7 @@ class Donation(Document):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     status: str = "pending"  # pending, confirmed, failed
     charity_id: Optional[str] = None
-
+    user_id: Optional[str] = None  # User ID of the donor
+    message: Optional[str] = None  # Optional message from the donor    
     class Settings:
         name = "donations"

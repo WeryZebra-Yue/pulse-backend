@@ -57,3 +57,10 @@ async def delete_donation(id: PydanticObjectId) -> bool:
     await donation.delete()
     return True
     
+async def retrieve_donations_done_by_user(user_id: PydanticObjectId) -> List[Donation]:
+    """
+    Retrieve all donations made by a specific user.
+    """
+    donations = await Donation.find(Donation.user_id == user_id).to_list()
+    donation_amount = sum(donation.amount for donation in donations)
+    return donations, donation_amount

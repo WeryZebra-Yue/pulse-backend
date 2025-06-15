@@ -35,14 +35,12 @@ async def retrieve_alerts(
     if should_reload:
         new_data = await fetch_alert_details_from_gemini(location or "global")
         if new_data:
-            # Clear old alerts (if needed)
-            await Alert.delete_all()
             # Save new alerts
             for alert_dict in new_data :
                 alert = Alert(
                     alert_id=alert_dict.get("alert_id", str(PydanticObjectId())),
                     message=alert_dict.get("title", ""),
-                    location=location,
+                    location=location,  
                     city=alert_dict.get("location", ""),
                     related_request_id=alert_dict.get("related_request_id"),
                     timestamp=alert_dict.get("timestamp", datetime.utcnow()),

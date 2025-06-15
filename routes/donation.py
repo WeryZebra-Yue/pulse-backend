@@ -9,6 +9,7 @@ from services.donation_service import (
     retrieve_donation,
     update_donation,
     delete_donation,
+    retrieve_donations_done_by_user
 )
 
 router = APIRouter()
@@ -93,3 +94,23 @@ async def delete_donation_route(id: PydanticObjectId):
             "data": True,
         }
     raise HTTPException(status_code=404, detail="Donation not found")
+
+# total donations amount done by a user
+@router.get(
+    "/total/{user_id}", 
+    response_model=Response,
+    description="Calculate the total amount of cryptocurrency donations made by a specific user identified by their wallet address. Aggregates all donation records associated with the provided user_id, summing up the donation amounts across all transactions. Essential for donor recognition, financial reporting, and tracking individual donor contributions to charitable causes. Returns 404 if no donations found for the user."
+)
+async def get_total_donations_amount_by_user(user_id: PydanticObjectId):
+    donations, donation_amount = await retrieve_donations_done_by_user(user_id)
+    if donations:
+        return {
+            "status_code": 200,
+            "response_type": "success",
+            "description": "Total donations retrieved successfully",
+            "data": {
+                "donations": donations,
+                "total_amount": donation_amount
+            },
+        }
+    raise HTTPException(status_code=404, detail="No donations found for the user")
