@@ -12,7 +12,8 @@ class MetaInfo(Document):
 class Alert(Document):
     alert_id: str
     message: str
-    location: Optional[str]  # City, Country
+    location: Optional[str]  
+    city: Optional[str] = None
     related_request_id: Optional[str]
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     meta: Optional[dict] 

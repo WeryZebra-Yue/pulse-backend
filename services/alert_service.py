@@ -14,7 +14,11 @@ async def retrieve_alerts(
         location: Optional[str] = None,
         refresh: bool = False
 ) -> List[Alert]:
-    alerts = await Alert.all().to_list()
+    # sort and filter alerts based on location and refresh flag
+    # alerts = await Alert.
+    if location is None:
+        location = "global"
+    alerts = await Alert.find(Alert.location == location).sort(Alert.timestamp.desc).to_list()
 
     should_reload = False
     meta_info = None
@@ -34,18 +38,18 @@ async def retrieve_alerts(
             await Alert.delete_all()
             # Save new alerts
             for alert_dict in new_data :
-                print(f"Processing alert: {alert_dict}")
                 alert = Alert(
                     alert_id=alert_dict.get("alert_id", str(PydanticObjectId())),
-                    message=alert_dict.get("message", ""),
-                    location=alert_dict.get("location"),
+                    message=alert_dict.get("title", ""),
+                    location=location,
+                    city=alert_dict.get("location", ""),
                     related_request_id=alert_dict.get("related_request_id"),
                     timestamp=alert_dict.get("timestamp", datetime.utcnow()),
                     details=alert_dict.get("details", []),
                     aid_available=alert_dict.get("aid_available", []),
                     missing_persons_reported=alert_dict.get("missing_persons_reported", ""),
                     source=alert_dict.get("source", "Unknown"),
-                    meta={  }
+                    meta={}
                 )
                 await alert.create()
             # Update meta info
@@ -86,7 +90,7 @@ async def delete_alert(alert_id: str) -> bool:
 genai.configure(api_key=Settings().genai_api_key)
 
 # Create a generative model
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 async def fetch_alert_details_from_gemini(location: str = "global") -> Optional[List[dict]]:
     prompt = f"""
@@ -98,10 +102,10 @@ async def fetch_alert_details_from_gemini(location: str = "global") -> Optional[
     - International relief organizations (e.g., UN, Red Cross, WHO)
     - Updates from social medias (e.g., Twitter, public APIs, RSS feeds) (Day one old data is fine.)
     {
-      "Include only 3-4 events." if location!="global" else ""
+      "Include only 3-4 events." if location!="global" else "Include only atleast 7-8 events."
     }
     For each crisis event, extract the following:
-
+    - title: Short, descriptive title of the event
     - type: Type of crisis (e.g., Earthquake, Flood)
     - location: Country and region affected
     - timestamp: Date and time of the event or last update (ISO format)
@@ -120,6 +124,7 @@ async def fetch_alert_details_from_gemini(location: str = "global") -> Optional[
     Example output:
     [
         {{
+            "title": "Flood in Berlin",
             "type": "Flood",
             "location": "Berlin, Germany",
             "timestamp": "2025-06-14T17:00:00Z",
