@@ -10,6 +10,7 @@ class Charity(Document):
     contact_info: Optional[str]
     website: Optional[str]
     alert_id: str  # Link to related alert
+    wallet_address: str  # Solana wallet address for donations
 
     class Settings:
         name = "charities"
