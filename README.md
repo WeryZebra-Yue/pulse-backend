@@ -88,13 +88,6 @@ uvicorn app:app --reload
 Refer to the API docs at `http://localhost:8000/docs` for interactive exploration.
 
 ---
-
-## Contributing
-
-Contributions are welcome! Please open issues or pull requests for bug fixes, new features, or improvements.
-
----
-
 ## License
 
 MIT License © 2025 Your Name or Organization
