@@ -114,3 +114,20 @@ async def get_total_donations_amount_by_user(user_id: PydanticObjectId):
             },
         }
     raise HTTPException(status_code=404, detail="No donations found for the user")
+
+# get history of donations done by a user
+@router.get(
+    "/history/{user_id}", 
+    response_model=Response,
+    description="Retrieve the complete history of cryptocurrency donations made by a specific user identified by their wallet address. Returns all donation records associated with the provided user_id, including amounts, currencies, timestamps, and linked charities. Essential for donor transparency, financial tracking, and generating personalized donor reports. Returns 404 if no donation history found for the user."
+)
+async def retrieve_donations_history_by_user(user_id: PydanticObjectId):
+    donations = await retrieve_donations_done_by_user(user_id)
+    if donations:
+        return {
+            "status_code": 200,
+            "response_type": "success",
+            "description": "Donations history retrieved successfully",
+            "data": donations,
+        }
+    raise HTTPException(status_code=404, detail="No donation history found for the user")
