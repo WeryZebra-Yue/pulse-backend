@@ -13,7 +13,7 @@ dnspython==2.6.1
 email_validator==2.1.1
 exceptiongroup==1.2.0
 fastapi==0.110.1
-filelock==3.18.0
+filelock==3.16.0
 fsspec==2025.5.1
 generativeai==0.0.1
 google==3.0.0
