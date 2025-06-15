@@ -8,6 +8,7 @@ from routes.charity import router as charity_router
 from routes.user import router as user_router
 from routes.donation import router as donation_router
 from routes.form import router as form_router
+from routes.alert_chat import router as alert_chat_router
 
 app = FastAPI(
     title="AidAgent API",
@@ -100,3 +101,4 @@ app.include_router(alert_router, prefix="/alerts", tags=["Alerts"])
 app.include_router(charity_router, prefix="/charities", tags=["Charities"])
 app.include_router(donation_router, prefix="/donations", tags=["Donations"])
 app.include_router(form_router, prefix="/forms", tags=["Forms"])
+app.include_router(alert_chat_router, prefix="/alerts/chat", tags=["Alert Chat"])
