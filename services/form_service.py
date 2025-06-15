@@ -21,3 +21,12 @@ async def add_message_to_form(alert_id: str, message_data: dict) -> Optional[For
     message = Message(**message_data)
     await form.add_message(message)
     return form
+
+async def get_active_form_by_user(user_id: PydanticObjectId) -> Optional[Form]:
+    """
+    Retrieve the active form for a user.
+    """
+    # write a query to find the form by user_id in any of the messages, message is a list of Message objects
+    forms = Form.find({"messages.user_id": user_id}).skip(0).limit(100)
+    # return all
+    return await forms.to_list() if forms else None 

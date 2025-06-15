@@ -14,12 +14,12 @@ class User(Document):
     class Settings:
         name = "users"
 
-    @field_validator("wallet_address")
-    def validate_solana_address(cls, v):
-        if v is None:
-            return v
-        try:
-            Pubkey(v)
-        except Exception:
-            raise ValueError("Invalid Solana wallet address")
-        return v
+    # @field_validator("wallet_address")
+    # def validate_solana_address(cls, v):
+    #     if v is None:
+    #         return v
+    #     try:
+    #         Pubkey(v)
+    #     except Exception:
+    #         raise ValueError("Invalid Solana wallet address")
+    #     return v
